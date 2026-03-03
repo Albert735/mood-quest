@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await params;
   // Fetch tracklist + cover for a playlist
   return NextResponse.json({ playlist: { id, tracks: [] } });
 }

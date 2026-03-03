@@ -6,7 +6,10 @@ export function useTrending() {
 
   useEffect(() => {
     // Fetch trending data
-    setLoading(false);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return { data, loading };

@@ -18,10 +18,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="flex flex-col min-h-screen">
+      <body className={`${inter.className} bg-black text-white`}>
+        <div className="flex min-h-screen flex-col">
+          {/* Navbar */}
           <Navbar />
-          <div className="flex-1">{children}</div>
+
+          {/* Main Content */}
+          <main className="flex-1 px-6 md:px-12 lg:px-20 py-10">
+            {children}
+          </main>
+
+          {/* Footer */}
           <Footer />
         </div>
       </body>
