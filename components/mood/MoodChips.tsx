@@ -3,7 +3,7 @@ import { Mood } from "@/types";
 
 export default function MoodChips() {
   return (
-    <div className="flex flex-wrap gap-3 justify-center">
+    <div className="flex flex-wrap max-w-2xl gap-3 justify-center">
       {MOODS.map((mood: Mood) => (
         <button
           key={mood.id}
@@ -14,7 +14,7 @@ export default function MoodChips() {
           hover:scale-105 active:scale-95
           transition-all duration-300 shadow-sm"
         >
-          <span className="text-base">{mood.emoji}</span>
+          {/* <span className="text-base">{mood.emoji}</span> */}
           {mood.label}
         </button>
       ))}

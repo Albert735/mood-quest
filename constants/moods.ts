@@ -1,9 +1,11 @@
-import { Mood } from '../types';
+import { Mood } from "../types";
 
 export const MOODS: Mood[] = [
-  { id: 'happy', label: 'Happy', emoji: '😊', seedGenres: ['pop', 'happy'] },
-  { id: 'sad', label: 'Sad', emoji: '😢', seedGenres: ['acoustic', 'sad'] },
-  { id: 'energetic', label: 'Energetic', emoji: '⚡', seedGenres: ['dance', 'electronic'] },
-  { id: 'chill', label: 'Chill', emoji: '🧘', seedGenres: ['lo-fi', 'chill'] },
-  { id: 'focus', label: 'Focus', emoji: '🧠', seedGenres: ['classical', 'ambient'] },
+  { id: "happy", label: "Happy", seedGenres: ["pop", "happy"] },
+  { id: "sad", label: "Sad", seedGenres: ["acoustic", "sad"] },
+  { id: "energetic", label: "Energetic", seedGenres: ["dance", "electronic"] },
+  { id: "chill", label: "Chill", seedGenres: ["lo-fi", "chill"] },
+  { id: "focus", label: "Focus", seedGenres: ["classical", "ambient"] },
+  { id: "romantic", label: "Romantic", seedGenres: ["romance", "ballad"] },
+  { id: "party", label: "Party", seedGenres: ["party", "dance"] },
 ];

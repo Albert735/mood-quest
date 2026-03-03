@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+// import { LightRays } from "@/components/ui/light-rays";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "MoodQuest - Music for Every Vibe",
@@ -18,16 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-black text-white`}>
+      <body className={`${roboto.className} bg-black text-white relative`}>
         <div className="flex min-h-screen flex-col">
-          {/* Navbar */}
           <Navbar />
-
           {/* Main Content */}
           <main className="flex-1 px-6 md:px-12 lg:px-20 py-10">
             {children}
           </main>
-
           {/* Footer */}
           <Footer />
         </div>

@@ -3,7 +3,7 @@ import { TypingAnimation } from "../ui/typing-animation";
 
 export default function Navbar() {
   return (
-    <nav className="flex w-full max-w-7xl mx-auto justify-between items-center p-4 ">
+    <nav className="flex w-full max-w-7xl mx-auto justify-between items-center p-4  z-10">
       <Link href="/" className="text-xl font-bold">
         <TypingAnimation showCursor={false}>Room 808</TypingAnimation>
       </Link>

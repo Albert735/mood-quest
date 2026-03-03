@@ -1,7 +1,7 @@
 export type Mood = {
   id: string;
   label: string;
-  emoji: string;
+  // emoji: string;
   seedGenres: string[];
 };
 
@@ -26,4 +26,16 @@ export type Playlist = {
   owner: string;
   tracks: Track[];
   externalUrl: string;
+};
+
+export type PlaylistCardData = {
+  title: string;
+  image: string;
+  mood: string;
+  curator: string;
+  description: string;
+  stats: {
+    likes: number;
+    tracks: number;
+  };
 };
