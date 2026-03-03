@@ -10,7 +10,7 @@ export default function HeroMusic() {
         {cards.map((_, index) => (
           <div
             key={index}
-            className="h-60 w-50  shrink-0 rounded-2xl bg-white/20 backdrop-blur-md border border-white/10 mx-2"
+            className="h-50 w-45  shrink-0 rounded-2xl bg-white/20 backdrop-blur-md border border-white/10 mx-2"
           >
             <Image
               src="/assets/drake.png"
@@ -23,9 +23,9 @@ export default function HeroMusic() {
         ))}
       </Marquee>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#00130C] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent" />
 
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#00100A] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent" />
     </div>
   );
 }

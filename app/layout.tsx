@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -12,7 +12,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "MoodQuest - Music for Every Vibe",
+  title: "Noctra - Music for Every Vibe",
   description: "Find the perfect music based on your current mood.",
 };
 

@@ -1,10 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import { getPlaylistTracks } from "@/lib/spotify";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } },
 ) {
-  const { id } = await params;
-  // Fetch tracklist + cover for a playlist
-  return NextResponse.json({ playlist: { id, tracks: [] } });
+  try {
+    const tracks = await getPlaylistTracks(params.id);
+    return NextResponse.json({ tracks });
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to fetch tracks" },
+      { status: 500 },
+    );
+  }
 }

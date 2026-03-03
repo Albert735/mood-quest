@@ -1,7 +1,6 @@
 export type Mood = {
   id: string;
   label: string;
-  // emoji: string;
   seedGenres: string[];
 };
 
@@ -18,15 +17,15 @@ export type Track = {
   externalUrl: string;
 };
 
-export type Playlist = {
+export interface Playlist {
   id: string;
-  title: string;
+  name: string; // Spotify uses "name" not "title"
   description: string;
-  coverUrl: string;
-  owner: string;
-  tracks: Track[];
-  externalUrl: string;
-};
+  images: { url: string }[]; // Spotify returns an array of images
+  external_urls: { spotify: string };
+  owner: { display_name: string };
+  tracks: { total: number };
+}
 
 export type PlaylistCardData = {
   title: string;

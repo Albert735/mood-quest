@@ -2,9 +2,17 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { PlaylistCardData } from "@/types";
+import { Playlist } from "@/types";
+import { buildPlatformLinks } from "@/lib/spotify";
+import Link from "next/link";
+import NextImage from "next/image";
 
-export function FlipCard({ data }: { data: PlaylistCardData }) {
+const cardVariants = {
+  front: { rotateY: 0 },
+  back: { rotateY: 180 },
+};
+
+export function FlipCard({ playlist }: { playlist: Playlist }) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const isTouchDevice =
@@ -14,10 +22,8 @@ export function FlipCard({ data }: { data: PlaylistCardData }) {
     if (isTouchDevice) setIsFlipped(!isFlipped);
   };
 
-  const cardVariants = {
-    front: { rotateY: 0 },
-    back: { rotateY: 180 },
-  };
+  const image = playlist.images?.[0]?.url;
+  const links = buildPlatformLinks(playlist.id, playlist.name);
 
   return (
     <div
@@ -28,74 +34,100 @@ export function FlipCard({ data }: { data: PlaylistCardData }) {
     >
       {/* FRONT */}
       <motion.div
-        className="absolute inset-0 rounded-3xl overflow-hidden 
-                   shadow-lg hover:shadow-2xl 
-                   transition-shadow duration-300
-                   backface-hidden"
+        className="absolute inset-0 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 backface-hidden"
         animate={isFlipped ? "back" : "front"}
         variants={cardVariants}
         transition={{ duration: 0.6, ease: "easeInOut" }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        <img
-          src={data.image}
-          alt={data.title}
-          className="h-full w-full object-cover"
-        />
+        {image ? (
+          <NextImage
+            src={image}
+            alt={playlist.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        ) : (
+          <div className="h-full w-full bg-white/10 flex items-center justify-center text-5xl">
+            🎵
+          </div>
+        )}
 
-        {/* Smooth gradient overlay */}
-        <div
-          className="absolute inset-0 bg-gradient-to-t 
-                        from-black/80 via-black/40 to-transparent"
-        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
         {/* Text */}
         <div className="absolute bottom-0 p-5">
-          <h3 className="text-lg md:text-xl font-semibold text-white tracking-tight">
-            {data.title}
+          <h3 className="text-lg md:text-xl font-semibold text-white tracking-tight truncate">
+            {playlist.name}
           </h3>
           <p className="text-xs md:text-sm text-white/60 mt-1">
-            {data.mood} • {data.curator}
+            {playlist.owner?.display_name ?? "Spotify"} •{" "}
+            {playlist.tracks?.total ?? 0} tracks
           </p>
         </div>
       </motion.div>
 
       {/* BACK */}
       <motion.div
-        className="absolute inset-0 rounded-3xl 
-                   bg-white/5 backdrop-blur-xl 
-                   border border-white/10 
-                   shadow-xl p-5 
-                   flex flex-col justify-between
-                   backface-hidden"
+        className="absolute inset-0 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl p-5 flex flex-col justify-between backface-hidden"
         initial={{ rotateY: 180 }}
         animate={isFlipped ? "front" : "back"}
         variants={cardVariants}
         transition={{ duration: 0.6, ease: "easeInOut" }}
         style={{ transformStyle: "preserve-3d", rotateY: 180 }}
       >
+        {/* Info */}
         <div>
-          <h3 className="text-lg font-semibold text-white">{data.title}</h3>
-          <p className="text-sm text-white/60 mt-3 leading-relaxed">
-            {data.description}
+          <h3 className="text-lg font-semibold text-white truncate">
+            {playlist.name}
+          </h3>
+          <p className="text-sm text-white/50 mt-1">
+            {playlist.owner?.display_name ?? "Spotify"}
+          </p>
+          <p className="text-xs text-white/40 mt-3 leading-relaxed line-clamp-3">
+            {playlist.description || "No description available."}
           </p>
         </div>
 
-        <div className="mt-4 text-sm text-white/50 flex justify-between">
-          <span>{data.stats.likes.toLocaleString()} Likes</span>
-          <span>{data.stats.tracks} Tracks</span>
+        {/* Stats */}
+        <div className="text-sm text-white/40 flex justify-between">
+          <span>{playlist.tracks?.total ?? 0} tracks</span>
         </div>
 
-        <button
-          className="mt-6 w-full py-2.5 rounded-full 
-                           bg-emerald-500/90 
-                           hover:bg-emerald-500 
-                           active:scale-95 
-                           transition-all duration-200 
-                           text-sm font-medium"
-        >
-          ▶ Play Now
-        </button>
+        {/* Platform Links */}
+        <div className="flex flex-col gap-2">
+          <Link
+            href={links.spotify}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full py-2 rounded-full bg-green-500 hover:bg-green-400 active:scale-95 transition-all text-sm font-medium text-black text-center"
+          >
+            Open in Spotify
+          </Link>
+          <div className="flex gap-2">
+            <Link
+              href={links.apple}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 py-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-xs font-medium text-white text-center"
+            >
+              Apple
+            </Link>
+            <Link
+              href={links.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 py-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-xs font-medium text-white text-center"
+            >
+              YT Music
+            </Link>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

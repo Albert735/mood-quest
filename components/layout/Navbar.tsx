@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className="flex w-full max-w-7xl mx-auto justify-between items-center p-4  z-10">
       <Link href="/" className="text-xl font-bold">
-        <TypingAnimation showCursor={false}>Room 808</TypingAnimation>
+        <TypingAnimation showCursor={false}>Noctra</TypingAnimation>
       </Link>
       <div className="flex gap-4 bg-gradient-to-r from-green-500 to-emerald-600 p-2 px-5 rounded-full">
         <Link href="/explore" className="flex items-center gap-2">
