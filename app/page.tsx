@@ -49,7 +49,7 @@ export default function Home() {
     <main className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-16 space-y-18">
       <HeroMusic />
 
-      <section className="flex flex-col items-center justify-between gap-18 text-center h-100">
+      <section className="flex flex-col items-center justify-center gap-12 text-center min-h-[400px]">
         <MorphingText
           className="text-3xl font-bold tracking-tight sm:text-6xl max-w-5xl mb-10"
           texts={[
@@ -59,8 +59,10 @@ export default function Home() {
           ]}
         />
 
-        <MoodSearchBar onSearch={handleSearchSubmit} />
-        <MoodChips selected={selectedMood} onSelect={handleMoodSelect} />
+        <div className="flex flex-col items-center justify-center gap-10 text-center w-full">
+          <MoodSearchBar onSearch={handleSearchSubmit} />
+          <MoodChips selected={selectedMood} onSelect={handleMoodSelect} />
+        </div>
       </section>
 
       <TrendingSection

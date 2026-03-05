@@ -1,20 +1,29 @@
+// app/api/spotify/trending/route.ts
 import { NextResponse } from "next/server";
 import { getTrendingPlaylists, getTrendingTracks } from "@/lib/spotify";
 
 export async function GET() {
-  console.log("CLIENT_ID:", process.env.SPOTIFY_CLIENT_ID);
-  console.log("CLIENT_SECRET:", process.env.SPOTIFY_CLIENT_SECRET);
-
   try {
+    // Fetch playlists and tracks concurrently
     const [playlists, tracks] = await Promise.all([
-      getTrendingPlaylists(10),
-      getTrendingTracks(10),
+      getTrendingPlaylists(20).catch((err) => {
+        // ← change 30 to 20
+        console.error("Failed to fetch playlists:", err);
+        return [];
+      }),
+      getTrendingTracks(12).catch((err) => {
+        console.error("Failed to fetch tracks:", err);
+        return [];
+      }),
     ]);
+    console.log("Playlists:", playlists);
+    console.log("Tracks:", tracks);
+
     return NextResponse.json({ playlists, tracks });
   } catch (error) {
-    console.error("Trending error:", error); // ← also log the actual error
+    console.error("Trending route error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch trending data" },
+      { playlists: [], tracks: [], error: "Failed to fetch trending data" },
       { status: 500 },
     );
   }

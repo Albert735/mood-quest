@@ -35,7 +35,7 @@ export default function MoodDiscovery() {
     <>
       <div className="flex flex-col items-center gap-6">
         <MoodSearchBar onSearch={handleSearch} />
-        <MoodChips activeMood={activeMood} onSelect={handleMoodSelect} />
+        <MoodChips selected={activeMood} onSelect={handleMoodSelect} />
       </div>
 
       <TrendingSection

@@ -67,17 +67,25 @@ const isValidTrack = (item: any): item is SpotifyTrack =>
 export const getTrendingPlaylists = async (limit = 10): Promise<Playlist[]> => {
   const token = await getAccessToken();
 
-  const res = await fetch(
-    `https://api.spotify.com/v1/search?q=top+hits+2024&type=playlist&limit=${limit}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: 3600 },
-    },
-  );
+  // Clamp limit to 1-20
+  const safeLimit = Math.min(Math.max(limit, 1), 20);
 
-  if (!res.ok) throw new Error("Failed to fetch trending playlists");
+  const url = `https://api.spotify.com/v1/search?q=top+charts&type=playlist&limit=${safeLimit}`;
+
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.log("Playlist fetch status:", res.status, res.statusText);
+    console.log("Response text:", text);
+    throw new Error("Failed to fetch trending playlists");
+  }
 
   const data = await res.json();
+
   if (!data.playlists?.items) return [];
 
   return data.playlists.items
@@ -93,32 +101,33 @@ export const getTrendingPlaylists = async (limit = 10): Promise<Playlist[]> => {
     }));
 };
 
-// ─── Trending Tracks ────────────────────────────────────────────
 export const getTrendingTracks = async (limit = 10): Promise<Track[]> => {
   const token = await getAccessToken();
+  const safeLimit = Math.min(Math.max(limit, 1), 20);
 
-  const res = await fetch(
-    `https://api.spotify.com/v1/search?q=trending+2024&type=track&limit=${limit}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: 3600 },
-    },
-  );
+  const url = `https://api.spotify.com/v1/search?q=top+hits&type=track&limit=${safeLimit}`;
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    next: { revalidate: 3600 },
+  });
 
-  if (!res.ok) throw new Error("Failed to fetch trending tracks");
+  if (!res.ok) {
+    const text = await res.text();
+    console.log("Track fetch status:", res.status, res.statusText);
+    console.log("Response text:", text);
+    throw new Error("Failed to fetch trending tracks");
+  }
 
   const data = await res.json();
-  if (!data.tracks?.items) return [];
-
-  return data.tracks.items.filter(isValidTrack).map((item: SpotifyTrack) => ({
-    id: item.id,
-    title: item.name || "No Title",
-    artist: item.artists?.[0]?.name || "Unknown Artist",
-    album: item.album?.name || "Unknown Album",
-    duration: item.duration_ms || 0,
-    coverUrl: item.album?.images?.[0]?.url || "",
-    previewUrl: item.preview_url || "",
-    externalUrl: item.external_urls?.spotify || "",
+  return data.tracks.items.filter(isValidTrack).map((track: SpotifyTrack) => ({
+    id: track.id,
+    title: track.name || "No Title",
+    artist: track.artists?.[0]?.name || "Unknown Artist",
+    album: track.album?.name || "Unknown Album",
+    duration: track.duration_ms || 0,
+    coverUrl: track.album?.images?.[0]?.url || "",
+    previewUrl: track.preview_url || "",
+    externalUrl: track.external_urls?.spotify || "",
   }));
 };
 
@@ -217,8 +226,12 @@ export const getPlaylistTracks = async (
 };
 
 // ─── Deep Links ───────────────────────────────────────────────
-export const buildPlatformLinks = (spotifyId: string, query: string) => ({
-  spotify: `https://open.spotify.com/playlist/${spotifyId}`,
+export const buildPlatformLinks = (
+  id: string,
+  query: string,
+  type: "playlist" | "track" = "playlist",
+) => ({
+  spotify: `https://open.spotify.com/${type}/${id}`,
   apple: `https://music.apple.com/search?term=${encodeURIComponent(query)}`,
   youtube: `https://music.youtube.com/search?q=${encodeURIComponent(query)}`,
 });
